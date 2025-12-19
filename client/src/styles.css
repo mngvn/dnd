@@ -1,0 +1,23 @@
+button {
+    margin: auto;
+    color: red;
+    margin-left: 50px;
+    margin-top: 10px;
+    
+}
+.status {
+    margin: auto;
+    color: red;
+    margin-left: 550px;
+    margin-top: 100px;
+}
+
+.board-row {
+    margin: auto;
+    margin-left: 475px;
+}
+
+.desc {
+    margin: auto;
+    margin-left: 475px;
+}

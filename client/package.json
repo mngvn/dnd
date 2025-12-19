@@ -1,0 +1,7 @@
+{
+  "name": "dnd-ai-client",
+  "version": "1.0.0",
+  "scripts": { "dev": "vite", "build": "vite build" },
+  "dependencies": { "react": "*", "react-dom": "*" },
+  "devDependencies": { "vite": "*", "@vitejs/plugin-react": "*" }
+}

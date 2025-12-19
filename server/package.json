@@ -1,0 +1,21 @@
+{
+  "name": "dnd-ai-server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "dependencies": {
+    "cors": "*",
+    "express": "*",
+    "ws": "*"
+  },
+  "devDependencies": {
+    "@types/express": "*",
+    "@types/node": "*",
+    "@types/ws": "*",
+    "nodemon": "*",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,68 @@
+users
+- id (uuid, pk)
+- email
+- display_name
+- password_hash / oauth_provider
+- created_at, updated_at
+
+characters
+- id (uuid, pk)
+- user_id (fk users)
+- name, race, class, level, xp
+- stats jsonb  -- STR/DEX/CON/INT/WIS/CHA base & mods
+- skills jsonb
+- spells jsonb
+- inventory jsonb
+- position jsonb  -- if world grid/map
+- privacy_settings
+- created_at, updated_at
+
+campaigns
+- id (uuid)
+- name
+- dm_mode ENUM('AI','human','hybrid')
+- world_state_id (fk)
+- created_by (user)
+- created_at
+
+campaign_members
+- id
+- campaign_id
+- user_id
+- role ENUM('player','owner','observer')
+
+world_states
+- id
+- campaign_id
+- canonical_state jsonb  -- global world variables
+- summary_text text  -- short snapshot
+- last_updated
+
+encounters
+- id
+- campaign_id
+- location jsonb
+- npc_list jsonb
+- encounter_log jsonb
+
+story_events
+- id
+- campaign_id
+- timestamp
+- author ('AI'|'user')
+- content text
+- context_snapshot jsonb  -- relevant state at that time
+
+embeddings
+- id (uuid)
+- campaign_id
+- type ENUM('npc','location','event','quest','lore','player_note')
+- text
+- vector vector  -- pgvector or stored in external vector DB
+- created_at
+
+combat_logs
+- id
+- campaign_id
+- snapshot jsonb
+- result jsonb
