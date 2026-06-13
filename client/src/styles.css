@@ -630,6 +630,19 @@ button {
   gap: 3px;
 }
 
+/* Demo banner */
+.demo-banner {
+  background: linear-gradient(90deg, #2a2150, #3a2c6b);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+  padding: 7px 14px;
+}
+.demo-banner::before {
+  content: '✨ ';
+}
+
 /* Toast */
 .toast {
   position: fixed;
