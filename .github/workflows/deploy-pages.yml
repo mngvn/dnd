@@ -32,6 +32,15 @@ jobs:
         with:
           node-version: 20
 
+      # Creates the Pages site automatically IF the repo allows the Actions
+      # token to write. Requires: Settings -> Actions -> General -> Workflow
+      # permissions -> "Read and write permissions". Without that, GitHub caps
+      # the token and this step (and the deploy) fail with a permissions error.
+      - name: Enable & configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Install client dependencies
         working-directory: client
         run: npm install
