@@ -1,13 +1,19 @@
 import React, { useEffect } from 'react';
 import { useGameSocket } from './useGameSocket';
+import { useLocalGame } from './useLocalGame';
 import Lobby from './components/Lobby';
 import CharacterSelect from './components/CharacterSelect';
 import GameRoom from './components/GameRoom';
 
+// In demo builds (e.g. GitHub Pages, which can't host the WebSocket server)
+// the whole game runs in the browser as a single-player preview.
+const DEMO = import.meta.env.VITE_DEMO_MODE === '1';
+const useGame = DEMO ? useLocalGame : useGameSocket;
+
 // Root component. Routes between the three phases (lobby → character select →
 // playing) based on server-authoritative room state.
 export default function App() {
-  const game = useGameSocket();
+  const game = useGame();
 
   // Auto-dismiss transient errors.
   useEffect(() => {
@@ -52,6 +58,11 @@ export default function App() {
 
   return (
     <div className="app">
+      {DEMO && (
+        <div className="demo-banner">
+          Single-player demo — the full version adds live multiplayer and a Claude AI Dungeon Master.
+        </div>
+      )}
       {screen}
       {game.error && <div className="toast">{game.error}</div>}
     </div>

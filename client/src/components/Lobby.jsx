@@ -70,7 +70,12 @@ export default function Lobby({ connected, dmMode, onCreate, onJoin }) {
           {connected ? 'Connected' : 'Connecting to server…'}
           {connected && (
             <span className="dm-badge">
-              DM: {dmMode === 'claude' ? 'Claude' : 'Mock narrator'}
+              DM:{' '}
+              {dmMode === 'claude'
+                ? 'Claude'
+                : dmMode === 'demo'
+                ? 'Demo narrator'
+                : 'Mock narrator'}
             </span>
           )}
         </div>

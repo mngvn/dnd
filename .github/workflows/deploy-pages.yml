@@ -1,0 +1,70 @@
+name: Deploy demo to GitHub Pages
+
+# Builds the client as a static, single-player demo and publishes it to
+# GitHub Pages. The full multiplayer + Claude DM experience needs the Node
+# server in server/ — that can't run on Pages, so this deploys a browser-only
+# preview (VITE_DEMO_MODE=1).
+
+on:
+  push:
+    branches:
+      - main
+      - claude/dreamy-mendel-20z54p
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; don't cancel an in-progress run.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Creates the Pages site automatically IF the repo allows the Actions
+      # token to write. Requires: Settings -> Actions -> General -> Workflow
+      # permissions -> "Read and write permissions". Without that, GitHub caps
+      # the token and this step (and the deploy) fail with a permissions error.
+      - name: Enable & configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Install client dependencies
+        working-directory: client
+        run: npm install
+
+      - name: Build static demo
+        working-directory: client
+        env:
+          VITE_DEMO_MODE: '1'
+          # Project pages are served from /<repo>/ — set to the repo name.
+          VITE_BASE: /${{ github.event.repository.name }}/
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: client/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

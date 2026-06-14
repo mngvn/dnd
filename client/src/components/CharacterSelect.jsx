@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react';
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE ||
-  `http://${window.location.hostname}:8080`;
+import React from 'react';
+import { CLASSES } from '../data/classes';
 
 // Character creation: browse the class roster, pick one, and (if host) start
-// the game once every player is ready.
+// the game once every player is ready. The class roster is bundled with the
+// client so this works both with the server and in the offline demo.
 export default function CharacterSelect({ room, playerId, onSelect, onStart }) {
-  const [classes, setClasses] = useState([]);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/api/classes`)
-      .then((r) => r.json())
-      .then(setClasses)
-      .catch(() => setClasses([]));
-  }, []);
+  const classes = CLASSES;
 
   const me = room.players.find((p) => p.id === playerId);
   const isHost = me?.isHost;

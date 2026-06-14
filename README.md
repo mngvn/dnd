@@ -99,6 +99,34 @@ classes, and the host hits **Begin the adventure**.
 
 ---
 
+## 🌐 Live demo (GitHub Pages)
+
+GitHub Pages serves **static files only**, so it can't run the Node WebSocket
+server. To still give people a clickable preview, the client can build in
+**demo mode** (`VITE_DEMO_MODE=1`): the entire game runs in the browser as a
+**single-player** session driven by the in-browser mock DM (you + two AI
+companions, full character select, scene, dice, inventory, and chat). The
+real-time multiplayer and the Claude-powered DM require running `server/`.
+
+A GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) builds and
+publishes this demo automatically on every push.
+
+**One-time setup:** in the repo, go to **Settings → Pages → Build and
+deployment → Source** and select **GitHub Actions**. After the next push the
+demo will be live at:
+
+```
+https://<your-username>.github.io/dnd/
+```
+
+(For this repo: `https://mngvn.github.io/dnd/`.)
+
+Build the demo locally to preview it:
+```bash
+cd client
+VITE_DEMO_MODE=1 npm run build && npm run preview
+```
+
 ## 🎮 How it works
 
 - **Phases:** `lobby` → `character_select` → `playing`, all server-authoritative.
