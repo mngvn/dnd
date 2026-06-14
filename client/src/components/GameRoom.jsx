@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SceneStage from './SceneStage';
 import SceneDisplay from './SceneDisplay';
 import ChatLog from './ChatLog';
 import DiceRoller from './DiceRoller';
@@ -49,6 +50,8 @@ export default function GameRoom({
       </aside>
 
       <main className="center-stage">
+        <SceneStage room={room} scene={scene} />
+
         <SceneDisplay
           scene={scene}
           dmTyping={dmTyping}

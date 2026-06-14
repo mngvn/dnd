@@ -62,20 +62,53 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Enemy roster the mock DM can drop into a scene so the stage shows foes.
+const ENEMIES = [
+  { id: 'goblin', name: 'Goblin', icon: '👺', hp: 7 },
+  { id: 'wolf', name: 'Dire Wolf', icon: '🐺', hp: 11 },
+  { id: 'skeleton', name: 'Skeleton', icon: '💀', hp: 9 },
+  { id: 'spider', name: 'Giant Spider', icon: '🕷️', hp: 10 },
+  { id: 'bandit', name: 'Bandit', icon: '🗡️', hp: 8 },
+  { id: 'ooze', name: 'Gray Ooze', icon: '🟢', hp: 12 },
+];
+
+let enemyCounter = 0;
+function makeEnemies(n) {
+  return [...ENEMIES]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, n)
+    .map((e) => ({ ...e, maxHp: e.hp, uid: `en_${Date.now()}_${enemyCounter++}` }));
+}
+
 export function openingScene() {
+  // Opening scenes sometimes start mid-danger.
+  const enemies = Math.random() < 0.5 ? makeEnemies(1) : [];
   return {
     title: 'A New Adventure',
     description: pick(OPENINGS),
     suggestedActions: [SUGGESTIONS[0], SUGGESTIONS[1], SUGGESTIONS[2]],
+    enemies,
   };
 }
 
-export function reactScene(actionText) {
+const PEACEFUL = /\b(talk|persuade|rest|camp|search|sneak|hide|negotiate|retreat|flee)\b/i;
+const HOSTILE = /\b(attack|fight|strike|charge|cast|shoot|stab|slay|kill|draw)\b/i;
+
+export function reactScene(actionText, prevEnemies = []) {
   const shuffled = [...SUGGESTIONS].sort(() => Math.random() - 0.5).slice(0, 3);
+  let enemies;
+  if (HOSTILE.test(actionText)) {
+    enemies = prevEnemies.length ? prevEnemies : makeEnemies(1 + (Math.random() < 0.4 ? 1 : 0));
+  } else if (PEACEFUL.test(actionText)) {
+    enemies = [];
+  } else {
+    enemies = Math.random() < 0.5 ? makeEnemies(1 + (Math.random() < 0.3 ? 1 : 0)) : [];
+  }
   return {
-    title: 'The Story Unfolds',
+    title: enemies.length ? 'Danger!' : 'The Story Unfolds',
     description: `You act: "${actionText}". ${pick(REACTIONS)}`,
     suggestedActions: shuffled,
+    enemies,
   };
 }
 

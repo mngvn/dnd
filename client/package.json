@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "react": "*",
-    "react-dom": "*"
+    "react-dom": "*",
+    "three": "*"
   },
   "devDependencies": {
     "vite": "*",

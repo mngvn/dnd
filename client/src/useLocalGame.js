@@ -76,14 +76,15 @@ export function useLocalGame() {
       const me = room?.players.find((p) => p.id === ME);
       pushEntry(makeEntry('action', me?.name || 'You', trimmed));
       setDmTyping(true);
+      const prevEnemies = scene?.enemies || [];
       setTimeout(() => {
-        const sc = reactScene(trimmed);
+        const sc = reactScene(trimmed, prevEnemies);
         setScene(sc);
         setDmTyping(false);
         setRoom((r) => (r ? { ...r, scene: sc, chatLog: [...r.chatLog, makeEntry('dm', 'Dungeon Master', sc.description)] } : r));
       }, 800);
     },
-    [room, pushEntry],
+    [room, scene, pushEntry],
   );
 
   const rollDice = useCallback(
